@@ -71,7 +71,7 @@ export function buildServer(d: ServerDeps): McpServer {
       title: "Search products",
       description: "Search the catalogue by keywords (title, SKU, category).",
       inputSchema: { query: z.string().min(1).max(100), limit: z.number().int().min(1).max(25).default(10), in_stock_only: z.boolean().default(false) },
-      annotations: { readOnlyHint: true, openWorldHint: false },
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     guarded("search_products", "catalog:read", ({ query, limit, in_stock_only }: { query: string; limit: number; in_stock_only: boolean }) => {
       const items = d.store.search(query, limit, in_stock_only);
@@ -85,7 +85,7 @@ export function buildServer(d: ServerDeps): McpServer {
       title: "Get order",
       description: "Order status and items. Customer contact details are masked unless the key has customers:pii.",
       inputSchema: { order_id: z.string().regex(/^#\d{3,10}$/, "Order IDs look like #1042") },
-      annotations: { readOnlyHint: true },
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     guarded("get_order", "orders:read", ({ order_id }: { order_id: string }) => {
       const o = d.store.orders.get(order_id);
@@ -101,7 +101,7 @@ export function buildServer(d: ServerDeps): McpServer {
       title: "List low stock",
       description: "Products at or below their reorder point, most urgent first.",
       inputSchema: {},
-      annotations: { readOnlyHint: true },
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     guarded("list_low_stock", "inventory:read", () => {
       const items = [...d.store.products.values()].filter((p) => p.stock <= p.reorderPoint).sort((a, b) => a.stock - a.reorderPoint - (b.stock - b.reorderPoint));
@@ -116,7 +116,7 @@ export function buildServer(d: ServerDeps): McpServer {
       title: "Adjust inventory",
       description: "Change stock for a SKU (positive = received, negative = written off). Call once without confirm_token to get a preview, then again with the token after the user approves.",
       inputSchema: { sku: z.string().min(1), delta: z.number().int().refine((n) => n !== 0, "delta cannot be 0"), reason: z.string().min(5).max(200), confirm_token: z.string().optional() },
-      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false },
+      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false },
     },
     guarded("adjust_inventory", "inventory:write", ({ confirm_token, ...args }: { sku: string; delta: number; reason: string; confirm_token?: string }) => {
       const p = d.store.products.get(args.sku);
@@ -146,7 +146,7 @@ export function buildServer(d: ServerDeps): McpServer {
         days_valid: z.number().int().min(1),
         confirm_token: z.string().optional(),
       },
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     },
     guarded("create_discount", "discounts:write", ({ confirm_token, ...args }: { code: string; percent: number; days_valid: number; confirm_token?: string }) => {
       if (args.percent > limits.maxDiscountPercent) return fail(`Discounts above ${limits.maxDiscountPercent}% need a manager in the back office.`);

@@ -34,6 +34,15 @@ describe("discovery", () => {
     const res = await client.readResource({ uri: "commerce://products/LW-BOB-12" });
     expect(JSON.parse((res.contents[0] as { text: string }).text)).toMatchObject({ stock: 7 });
   });
+
+  it("declares all four behaviour hints on every tool", async () => {
+    const { client } = await connect(principal(ALL));
+    for (const tool of (await client.listTools()).tools) {
+      for (const hint of ["readOnlyHint", "destructiveHint", "idempotentHint", "openWorldHint"] as const) {
+        expect(typeof tool.annotations?.[hint], `${tool.name}.${hint}`).toBe("boolean");
+      }
+    }
+  });
 });
 
 describe("read tools", () => {
