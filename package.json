@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ndanetaadmire-debug/mcp-commerce-server-.git"
+    "url": "git+https://github.com/ndanetaadmire-debug/mcp-commerce-server.git"
   },
   "author": "Admire T. Ndaneta",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ndanetaadmire-debug/mcp-commerce-server-/issues"
+    "url": "https://github.com/ndanetaadmire-debug/mcp-commerce-server/issues"
   },
-  "homepage": "https://github.com/ndanetaadmire-debug/mcp-commerce-server-#readme",
+  "homepage": "https://github.com/ndanetaadmire-debug/mcp-commerce-server#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",
     "zod": "^4.6.7"

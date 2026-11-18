@@ -1,6 +1,6 @@
 # mcp-commerce-server
 
-[![CI](https://github.com/ndanetaadmire-debug/mcp-commerce-server-/actions/workflows/ci.yml/badge.svg)](https://github.com/ndanetaadmire-debug/mcp-commerce-server-/actions/workflows/ci.yml)
+[![CI](https://github.com/ndanetaadmire-debug/mcp-commerce-server/actions/workflows/ci.yml/badge.svg)](https://github.com/ndanetaadmire-debug/mcp-commerce-server/actions/workflows/ci.yml)
 ![MCP](https://img.shields.io/badge/Model%20Context%20Protocol-1.x-6f42c1)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-blue)
